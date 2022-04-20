@@ -1,0 +1,16 @@
+{
+    "domain": "http://localhost:3000",
+    "mailServer": {
+        "server": "smtp.mail.com",
+        "port": "465",
+        "userName": "abc@gmail.com",
+        "password": "abc"
+    },
+    "moongodb": {
+        "password": "XDszDihdFCslb3Gl",
+        "username": "usertest",
+        "server": "cluster0.zfios.mongodb.net",
+        "dbname": "IOS_512022_2"
+    }
+
+}
