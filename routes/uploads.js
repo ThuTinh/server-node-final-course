@@ -4,6 +4,7 @@ const multer = require("multer");
 module.exports = function (app) {
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
+      console.log("des", file);
       cb(null, "uploads");
     },
     filename: function (req, file, cb) {
@@ -35,18 +36,18 @@ module.exports = function (app) {
     },
   });
 
-  const limits = { fileSize: 102400 }; // 100KB
+  // const limits = { fileSize: 	2000000 }; // 100KB
 
-  const uploads = multer({ storage, limits }).single("avatar");
+  const uploads = multer({ storage, /*limits*/ }).single("avatar");
   app.post("/uploads-file", function (req, res) {
-    console.log("file:", req.file);
+    console.log("file:", req.rawHeaders,req.file);
     uploads(req, res, function (err) {
       if (err instanceof multer.MulterError) {
         res.send({ result: 0, err });
       } else if (err) {
         res.send({ result: 0, err });
       } else {
-        res.send({ result: 1, msg: "Upload scusses" });
+        res.send({ result: 1, filename: req.file.originalname});
       }
     });
   });

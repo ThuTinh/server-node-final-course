@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(express.static("uploads"));
 
 // Body Parser
 var bodyPaser = require("body-parser");
@@ -10,6 +11,8 @@ var bodyPaser = require("body-parser");
 app.use(bodyPaser.urlencoded({extended: true}));
 // parse application/json
 app.use(bodyPaser.json())
+const authChecker = require("./common/checkAuth")
+app.use(authChecker)
 
 
 app.listen(port, () => console.log(`Server listening on port ${port}!`))
@@ -32,6 +35,9 @@ fs.readFile("./config.json", "utf8", function(err, data){
             console.log("Mongo connected successfully.");
             require("./routes/authencation")(app);
             require("./routes/uploads")(app);
+            require("./routes/cost")(app);
+            require("./routes/income")(app);
+            
         } else {
             console.log("Mongo connected failed!. " + err);
         }

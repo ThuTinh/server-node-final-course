@@ -22,12 +22,15 @@ module.exports = function (app) {
     })
   );
   app.post("/register", (req, res) => {
-    console.log("req", req.body);
+    console.log("register body", req.body);
 
     const username = req.body.username;
     const password = req.body.password;
+    const phone = req.body.phone;
+    const avatar = req.body.avatar;
 
-    if (!username || !password) {
+
+    if (!username || !password || !phone || !avatar) {
       res.json({
         result: 0,
         data: "Lack of data",
@@ -47,6 +50,8 @@ module.exports = function (app) {
             var newUser = new User({
               username: username,
               password: hash,
+              avatar: avatar,
+              phone: phone,
             });
             newUser.save((err) => {
               if (err) {
@@ -61,6 +66,7 @@ module.exports = function (app) {
     }
   });
   app.post("/login", function (req, res) {
+    console.log("Login body", req.body)
     const username = req.body.username;
     const password = req.body.password;
 
@@ -83,18 +89,21 @@ module.exports = function (app) {
             } else {
               // Create Token
               user.password = "";
-              jwt.sign(user.toJSON(), secret, {}, function (err, token) {
+              jwt.sign(user.toJSON(), secret, {expiresIn: '10h'}, function (err, token) {
                 if (err) {
                   console.log("Token loi " + err);
                   res.json({ result: 0, data: "Token loi" });
                 } else {
                   //Save session
                   req.session.token = token;
-                  res.json({ result: 1, token, username });
+
+                  res.json({ result: 1, token, username, avatar: user.avatar });
                 }
               });
             }
           });
+        } else {
+          res.json({ result: 0, data: "User not exist " });
         }
       });
     }
