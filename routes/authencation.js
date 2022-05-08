@@ -89,7 +89,7 @@ module.exports = function (app) {
             } else {
               // Create Token
               user.password = "";
-              jwt.sign(user.toJSON(), secret, {expiresIn: '10h'}, function (err, token) {
+              jwt.sign(user.toJSON(), secret, {expiresIn: '365d'}, function (err, token) {
                 if (err) {
                   console.log("Token loi " + err);
                   res.json({ result: 0, data: "Token loi" });
@@ -107,5 +107,29 @@ module.exports = function (app) {
         }
       });
     }
+  });
+
+  app.get("/check-authen", function (req, res) {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, secret);
+    const username = decodedToken.username;
+    if (!username) {
+      res.status(401).json({
+        result: 0,
+        msg: "Invalid username " + username,
+      });
+    }  else {
+      res.status(200).json({
+        result: 1,
+        msg: username,
+      });
+    }
+  } catch (error) {
+    res.status(401).json({
+      result: 0,
+      msg: "Invalid username " + username,
+    });
+  }
   });
 };

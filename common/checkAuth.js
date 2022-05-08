@@ -3,7 +3,7 @@ var jwt = require("jsonwebtoken");
 var secret = "serverapp";
 module.exports = function authChecker(req, res, next) {
   try {
-    if (req.path == "/login" || req.path == "/register") {
+    if (req.path == "/login" || req.path == "/register" || req.path == "/uploads-file") {
       next();
     } else {
       const token = req.headers.authorization.split(" ")[1];

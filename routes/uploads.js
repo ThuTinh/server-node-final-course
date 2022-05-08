@@ -41,6 +41,7 @@ module.exports = function (app) {
   const uploads = multer({ storage, /*limits*/ }).single("avatar");
   app.post("/uploads-file", function (req, res) {
     console.log("file:", req.rawHeaders,req.file);
+    console.log(res)
     uploads(req, res, function (err) {
       if (err instanceof multer.MulterError) {
         res.send({ result: 0, err });
